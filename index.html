@@ -23,21 +23,45 @@
 		      weather: d.HourlySkyWeather,
 		      visibility: d.HourlyVisibility,
 		      windDirection: d.HourlyWindDirection,
-		      windSpeed: d.HourlyWindSpeed
+		      windSpeed: d.HourlyWindSpeed,
+		      sunriseHour: d.SunriseHour,
+		      sunriseMin: d.SunriseMin,
+		      sunsetHour: d.SunsetHour,
+		      sunsetMin: d.SunsetMin
 	     };
 	 }).then(function (data) {
 
+	     var xScale = d3.scaleLinear()
+			    .domain([0, 365]) //Plan to take i mod 24 for days since start
+			    .range([0, width]);
+	     
 	     var yScale = d3.scaleLinear()
-			    .domain([0, 23])
+			    .domain([0, 23]) //Have midnight on top and noon in the middle
 			    .range([0, height]);
 
 	     var container = d3.select("body")
-		       .append("svg")
-		       .attr("width", width + margin.left + margin.right)
-		       .attr("height", height + margin.top + margin.bottom)
+			       .append("svg")
+			       .attr("width", width + margin.left + margin.right)
+			       .attr("height", height + margin.top + margin.bottom)
 			       .append("g")
 			       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-	     
+
+	     var rect = container.selectAll("rect")
+				 .data(data)
+				 .enter()
+				 .append("rect")
+				 .attr("class", "hour")
+				 .attr("x", function (d, i) {
+				     return xScale(Math.floor(i / 24)); //Group hours in 24s
+				 })
+				 .attr("y", function (d) {
+				     return yScale(d.hour);
+				 })
+				 .attr("width", width / 365) //One day per column
+				 .attr("height", height / 24) //One hour per row
+				 .attr("fill", function (d) {
+				     return "black";
+				 });
 	 })
 	 
 	</script>
