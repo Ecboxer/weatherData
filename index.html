@@ -13,8 +13,33 @@
 	 var width = 1500 - margin.left - margin.right;
 	 var height = 500 - margin.top - margin.bottom;
 
+	 //Load the data
 	 d3.csv("resources/weatherData.csv", function (d) {
-	     return {
+	     return { year: d.Year,
+		      month: d.Month,
+		      day: d.Day,
+		      hour: d.Hour,
+		      sunlight: d.SunlightMin,
+		      weather: d.HourlySkyWeather,
+		      visibility: d.HourlyVisibility,
+		      windDirection: d.HourlyWindDirection,
+		      windSpeed: d.HourlyWindSpeed
+	     };
+	 }).then(function (data) {
+
+	     var yScale = d3.scaleLinear()
+			    .domain([0, 23])
+			    .range([0, height]);
+
+	     var container = d3.select("body")
+		       .append("svg")
+		       .attr("width", width + margin.left + margin.right)
+		       .attr("height", height + margin.top + margin.bottom)
+			       .append("g")
+			       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	     
+	 })
+	 
 	</script>
     </body>
 </html>
