@@ -36,7 +36,7 @@
 			    .range([0, width]);
 	     
 	     var yScale = d3.scaleLinear()
-			    .domain([0, 23]) //Have midnight on top and noon in the middle
+			    .domain([0, 24]) //Have midnight on top and noon in the middle
 			    .range([0, height]);
 
 	     var container = d3.select("body")
@@ -60,8 +60,15 @@
 				 .attr("width", width / 365) //One day per column
 				 .attr("height", height / 24) //One hour per row
 				 .attr("fill", function (d) {
-				     return "black";
+				     if (Number(d.hour) < Number(d.sunriseHour)) {
+					 return "black";
+				     } else if (Number(d.hour) > Number(d.sunsetHour)) {
+					 return "black";
+				     } else {
+					 return "rgb(102,102,153)";
+				     };
 				 });
+
 	 })
 	 
 	</script>
