@@ -39,6 +39,24 @@
 			    .domain([0, 24]) //Have midnight on top and noon in the middle
 			    .range([0, height]);
 
+	     var lightScale = d3.scaleSequential(d3.interpolateInferno); //Blk to Ylw, 0 to 1
+
+	     var amScale = d3.scaleLinear() //Scale for pre-sunrise
+			     .domain([7, 0])
+			     .range([0, 0.5]);
+
+	     var pmScale = d3.scaleLinear() //Scale for post-sunset
+			     .domain([7, 0])
+			     .range([0, 0.5]);
+
+	     var dayScale = d3.scaleLinear() //Scale for daytime
+			      .domain([0, 8])
+			      .range([0.5, 1]);
+
+	     var vizScale = d3.scaleLinear() //Scale for visibility
+			      .domain([0, 9])
+			      .range([0.15, 1]);
+	     
 	     var container = d3.select("body")
 			       .append("svg")
 			       .attr("width", width + margin.left + margin.right)
@@ -61,12 +79,19 @@
 				 .attr("height", height / 24) //One hour per row
 				 .attr("fill", function (d) {
 				     if (Number(d.hour) < Number(d.sunriseHour)) {
-					 return "black";
+					 return lightScale(amScale(d.sunriseHour - d.hour));
 				     } else if (Number(d.hour) > Number(d.sunsetHour)) {
-					 return "black";
+					 return lightScale(pmScale(d.hour - d.sunsetHour));
 				     } else {
-					 return "rgb(102,102,153)";
+					 return lightScale(dayScale(Math.min(d.hour - d.sunriseHour, d.sunsetHour - d.hour)));
 				     };
+				 })
+				 .attr("opacity", function (d) {
+				     if (d.visibility == 'NaN') {
+					 return 1.0;
+				     } else {
+					 return  vizScale(d.visibility);
+				     }
 				 });
 
 	 })
