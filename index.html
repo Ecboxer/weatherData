@@ -101,12 +101,14 @@
 
 	     var dataLeg = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ];
 
+	     var dataLeg2 = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
+
 	     var containerLeg = d3.select("body")
-				     .append("svg")
-				     .attr("width", widthLeg + margin.left + margin.right)
-				     .attr("height", height + margin.top + margin.bottom)
-				     .append("g")
-				     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+				  .append("svg")
+				  .attr("width", widthLeg + margin.left + margin.right)
+				  .attr("height", height + margin.top + margin.bottom)
+				  .append("g")
+				  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 	     
 	     var rectLegend = containerLeg.selectAll("rect")
 					  .data(dataLeg)
@@ -122,6 +124,21 @@
 					      return (lightScale(d / 12));
 					  });
 
+	     var rectLegend2 = containerLeg.selectAll(".in")
+					   .data(dataLeg2)
+					   .enter()
+					   .append("rect")
+					   .attr("x", 70)
+					   .attr("y", function (d) {
+					       return yScale(d + 2);
+					   })
+					   .attr("width", 20)
+					   .attr("height", 20)
+					   .attr("fill", "#65156e")
+					   .attr("opacity", function (d) {
+					       return vizScale(d);
+					   })
+	     
 	     var textLegend = containerLeg.selectAll("text")
 					  .data(dataLeg)
 					  .enter()
@@ -131,7 +148,20 @@
 					      return yScale(d + 2.5);
 					  })
 					  .text(function (d) {
-					      return d - 6;
+					      return String(d - 6);
+					  })
+					  .style("font-family", "sans-serif");
+
+	     var textLegend2 = containerLeg.selectAll(".in")
+					  .data(dataLeg2)
+					  .enter()
+					  .append("text")
+					  .attr("x", 100)
+					  .attr("y", function (d) {
+					      return yScale(d + 2.5);
+					  })
+					  .text(function (d) {
+					      return String(d);
 					  })
 					  .style("font-family", "sans-serif");
 
